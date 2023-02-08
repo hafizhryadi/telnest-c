@@ -6,15 +6,15 @@ function Car(brand, color, maxSpeed, chassisNumber) {
 }
 
 Car.prototype.drive = function() {
-    alert(`${this.brand} ${this.color} is driving`);
+    console.log(`${this.brand} ${this.color} is driving`);
 }
 
 Car.prototype.reverse = function() {
-    alert(`${this.brand} ${this.color} is reversing`);
+    console.log(`${this.brand} ${this.color} is reversing`);
 }
 
 Car.prototype.turn = function() {
-    alert(`${this.brand} ${this.color} is turning`);
+    console.log(`${this.brand} ${this.color} is turning`);
 }
 
 const car1 = new Car('Toyota', 'Silver', 200, 'to-1');
@@ -54,3 +54,161 @@ console.log(phone1);
 
 phone1.heat();
 phone2.down();
+
+
+class Mail {
+    constructor(sender, receiver, subject, body) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.subject = subject;
+        this.body = body;
+        this._number = this.#generateNumber();
+    }
+
+    get number() {
+        return this._number;
+    }
+
+    set number(number) {
+        console.log('not accessible');
+    }
+ 
+    // Methods
+    send() {
+        console.log(`Sending mail from ${this.sender} to ${this.receiver}`);
+    }
+
+    sendLater(delay) {
+        console.log(`Sending after ${delay} ms`);
+        
+        setTimeout(() => {
+            this.send();
+        }, delay);
+    }
+
+    saveAsDraft() {
+        console.log('Saving mail as draft');
+    }
+
+    #generateNumber() {
+        return `${this.sender}-${Math.floor(Math.random() * 100)}`;
+    }
+}
+
+const mail = new Mail('netr', 'tern', 'test', 'testt');
+
+
+// mail.#generateNumber();
+// console.log(mail.#generateNumber());
+
+// Pewarisan 
+class MailService {
+    constructor(sender) {
+        this.sender = sender;
+    }
+
+    sendMessage(message, receiver) {
+        console.log(`${this.sender} sent ${message} to ${receiver}`);
+    }
+
+    sendBroadcastMessage(message, receivers) {
+        for (const receiver of receivers) {
+            this.sendMessage(message, receiver);
+        }
+    }
+
+    sendDelayedMessage(message, receiver, delay) {
+        setTimeout(() => {
+            this.sendMessage(message, receiver);
+        }, delay);
+    }
+
+    
+}
+
+class WhatsAppService extends MailService {
+    sendBroadcastMessage(message, receivers) {
+        for (const receiver of receivers) {
+            this.sendMessage(message, receiver);
+        }
+    }
+
+    constructor(sender, isBusiness) {
+        super(sender);
+        this.isBusiness = isBusiness;
+    }
+
+    // overriding method
+    sendMessage(message, receiver) {
+        super.sendMessage(message, receiver);
+
+        console.log('message sent via whatsapp');
+    }
+}
+class EmailService extends MailService {
+    sendDelayedMessage(message, receiver, delay) {
+        setTimeout(() => {
+            this.sendMessage(message, receiver);
+        }, delay);
+    }
+}
+
+const whatsapp = new MailService('+6285781828384');
+const email = new MailService('new@mail.com');
+const mailService = new MailService('someSender');
+const whatsappService = new WhatsAppService('+6281234567890', true);
+
+mailService.sendMessage('Hai apa kabar?', 'someReceiver');
+whatsappService.sendMessage('Hai, apa kabar?', '+6289876543210')
+
+whatsapp.sendMessage('Hello', '+6285784858687');
+whatsapp.sendBroadcastMessage('Hello', ['+6289876543210', '+6282234567890']);
+
+email.sendMessage('Hello', 'john@doe.com');
+email.sendDelayedMessage('Hello', 'john@doe.com', 4000);
+
+// inherit
+// function MailService(sender) {
+//     this.sender = sender;
+//   }
+   
+//   MailService.prototype.sendMessage = function (message, receiver) {
+//     console.log(`${this.sender} sent ${message} to ${receiver}`);
+//   }
+   
+//   function WhatsAppService(sender) {
+//     MailService.call(this, sender);
+//   }
+   
+//   // Prototype inheritance
+//   WhatsAppService.prototype = Object.create(MailService.prototype);
+//   WhatsAppService.prototype.constructor = WhatsAppService;
+   
+//   WhatsAppService.prototype.sendBroadcastMessage = function (message, receivers) {
+//     for (const receiver of receivers) {
+//       this.sendMessage(message, receiver);
+//     }
+//   }
+   
+//   function EmailService(sender) {
+//     MailService.call(this, sender);
+//   }
+   
+//   // Prototype inheritance
+//   EmailService.prototype = Object.create(MailService.prototype);
+//   EmailService.prototype.constructor = EmailService;
+   
+//   EmailService.prototype.sendDelayedMessage = function (message, receiver, delay) {
+//     setTimeout(() => {
+//       this.sendMessage(message, receiver);
+//     }, delay);
+//   }
+
+//   const whatsapp = new MailService('+6285781828384');
+//   const email = new MailService('new@mail.com');
+   
+//   whatsapp.sendMessage('Hello', '+6289876543210');
+//   whatsapp.sendBroadcastMessage('Hello', ['+6289876543210', '+6282234567890']);
+//   email.sendMessage('Hello', 'john@doe.com');
+//   email.sendDelayedMessage('Hello', 'john@doe.com', 3000);
+
